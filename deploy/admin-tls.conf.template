@@ -1,0 +1,8 @@
+# Admin/SOC over TLS on 8443 (copied to deploy/tls/admin-tls.conf by scripts/make_tls_cert.*). $admin_ok comes from nginx.conf.
+server {
+  listen 8443 ssl;
+  ssl_certificate     /etc/nginx/tls/server.crt;
+  ssl_certificate_key /etc/nginx/tls/server.key;
+  ssl_protocols TLSv1.2 TLSv1.3;
+  location / { if ($admin_ok = 0) { return 404; } proxy_pass http://control:8001; }
+}

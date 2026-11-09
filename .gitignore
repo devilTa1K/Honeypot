@@ -1,0 +1,36 @@
+.env
+node_modules
+dist
+__pycache__
+*.db
+deploy/tls/*.key
+deploy/tls/*.crt
+deploy/tls/*.conf
+deploy/envs/*.yml
+deploy/envs/*.conf
+geoip/*.mmdb
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Runtime database
+events.db
+
+# Node.js
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Build artifacts
+dist/
+build/

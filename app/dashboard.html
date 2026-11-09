@@ -1,0 +1,13 @@
+<!doctype html><meta charset=utf-8><link rel=icon href="data:,"><title>Honeypot-in-a-Box SOC</title>
+<style>:root{--bg:#0b1020;--p:#121a33;--t:#d7e0ff;--a:#4ade80}body{margin:0;background:var(--bg);color:var(--t);font:14px ui-monospace,monospace}
+header{padding:14px 20px;background:var(--p);display:flex;justify-content:space-between}h1{font-size:16px;margin:0;color:var(--a)}
+main{display:grid;grid-template-columns:1fr 2fr;gap:12px;padding:12px}.c{background:var(--p);border:1px solid #243056;border-radius:8px;padding:12px}
+#feed{height:70vh;overflow:auto}.r{padding:3px 0;border-bottom:1px solid #1c2748}.reconnaissance{color:#60a5fa}.enumeration{color:#facc15}.credential_probing{color:#fb923c}.data_discovery_attempt{color:#f472b6}.exploitation_attempt,.privilege_escalation_attempt{color:#f87171}
+button{background:#7f1d1d;color:#fff;border:0;padding:6px 10px;border-radius:4px;cursor:pointer}</style>
+<header><h1>HONEYPOT-IN-A-BOX // SOC</h1><button onclick="fetch('/admin/kill',{method:'POST',headers:{'x-admin-token':location.hash.slice(1)}})">EMERGENCY SHUTDOWN</button></header>
+<main><div class=c><b>Classifications</b><div id=stats></div></div><div class=c><b>Live feed</b><div id=feed></div></div></main>
+<script>const T=decodeURIComponent(location.hash.slice(1)),H={'x-admin-token':T},s={},f=document.getElementById('feed');
+function add(e){s[e.label]=(s[e.label]||0)+1;document.getElementById('stats').innerHTML=Object.entries(s).map(([k,v])=>`<div class=${k}>${k}: ${v}</div>`).join('');
+const d=document.createElement('div');d.className='r '+e.label;d.textContent=`${new Date(e.ts*1000).toLocaleTimeString()} ${e.ip} ${e.method} ${e.path} [${e.label}]`;f.prepend(d)}
+fetch('/admin/events',{headers:H}).then(r=>r.json()).then(a=>a.reverse().forEach(add));
+const w=new WebSocket((location.protocol=='https:'?'wss://':'ws://')+location.host+'/ws?token='+encodeURIComponent(T));w.onmessage=m=>add(JSON.parse(m.data));w.onopen=()=>setInterval(()=>w.send('ping'),20000)</script>
